@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block main_title%}Usuários{% endblock %}
+{% block first_title %}User{% endblock %}
+{% block sub_title %}Usuários{% endblock %}
+{% block title %}Usuários{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'success' %}
+        <div id="success-message" class="alert alert-success">
+          {{ message }}
+        </div>
+        <script>
+            // Adiciona uma função para remover a mensagem de sucesso após 10 segundos
+            setTimeout(function() {
+              var successMessage = document.getElementById('success-message');
+              if (successMessage) {
+                successMessage.remove();
+              }
+            }, 10000); // 10 segundos em milissegundos
+          </script>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link href="{{ url_for('static', filename='styles/users.css')}}" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <style>
+        /* Definindo altura fixa para as linhas da tabela */
+        #tabelaUsuarios tbody tr {
+            height: 40px; /* Ajuste conforme necessário */
+        }
+        
+        /* Definindo altura máxima para o corpo da tabela */
+        #corpoTabela {
+            max-height: 400px; /* Ajuste conforme necessário */
+            overflow-y: auto;
+        }
+
+        /* Forçar largura fixa para as células específicas da tabela */
+        #tabelaUsuarios th:nth-child(2), #tabelaUsuarios td:nth-child(2), /* Coluna do Nome */
+        /*#tabelaAlunos th:nth-child(3), #tabelaAlunos td:nth-child(3),  Coluna do RA */
+        #tabelaAUsuarios th:nth-child(4), #tabelaUsuarios td:nth-child(4) { /* Coluna do Professor */
+            min-width: 200px; /* Largura fixa para as colunas Nome, RA e Professor */
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <div class="navegacao-menu-usuarios">
+        <div>
+            <!-- ... outros elementos ... -->
+            <select id="filtroOpcao">
+              <option value="1">Filtrar por Nome</option>
+              <option value="2">Filtrar por Matrícula</option>
+            </select>
+          </div>
+        <div id="pesquisa-user">
+            <input type="text" id="myInput" onkeyup="filtrarTabela()" placeholder="Pesquisar por nome...">
+            <span id="icon-pesquisa"class="material-symbols-outlined">
+            search
+            </span>
+        </div>
+        <div>
+            <a id="btn-user" href="/cadastro">Novo Usuário <span class="material-symbols-outlined">
+                add
+                </span></a>
+        </div>
+    </div>
+    <div>
+    <table id="tabelaUsuarios">
+        <thead>
+        <tr> 
+            <th><input type='checkbox' id='checkAll'></th>
+            <th>Nome</th>
+            <th>Matricula</th>
+            <th>Cargo</th>
+            <th>Cadastro</th>
+            <th>Trabalho</th>
+            <th>Status</th>    
+            <th>Ação</th>
+
+        </tr>
+        </thead>
+        <tbody id="corpoTabela">
+        <!-- Aqui serão inseridos os alunos -->
+        <!--{% for usuario in usuarios%}-->
+            <!--<h2>{{ usuario.name }}</h2>-->
+        <!-- {% endfor %} -->
+        </tbody>
+    </table>
+    
+    <div id="menu-paginacao">
+        <div>
+            <h2 id="quantidadeUsuarios"></h2>
+        </div>
+        <div class="pagination" id="paginacao">
+            <!-- Aqui serão inseridos os links de paginação -->
+        </div>
+    </div>
+
+    <script>
+        // Lista de alunos (substitua essa lista com seus dados reais)
+     
+           // Lista de alunos (substitua essa lista com seus dados reais)
+        var usuarios = [
+            {% for usuario in usuarios %}
+                { 
+                    nome: "{{ usuario.name }}", 
+                    matricula: "{{ usuario.matricula }}", 
+                    cargo: "{{ usuario.cargo }}",
+                    cadastro: "{{ usuario.data }}",  
+                    trabalho: "{{ usuario.local_trabalho }}", 
+                    status: "{{ usuario.situacao }}"
+                },
+            {% endfor %}
+        ];
+
+        var currentPage = 1;
+        var rowsPerPage = 10;
+
+        // Função para exibir os alunos na tabela
+        // Função para exibir os alunos na tabela
+        // Função para exibir os alunos na tabela
+        function mostrarUsuarios() {
+            var corpoTabela = document.getElementById("corpoTabela");
+            var filtroOpcao = document.getElementById("filtroOpcao").value;
+            var input = document.getElementById("myInput").value.toUpperCase();
+
+            // Limpar conteúdo anterior
+            corpoTabela.innerHTML = "";
+
+            var totalUsuarios = 0;
+
+            // Exibir os alunos que atendem ao critério de filtro
+            var filteredUsuarios = usuarios.filter(function(usuario) {
+                var incluirUsuario = false;
+                if (filtroOpcao === "1") {
+                    if (usuario.nome.toUpperCase().indexOf(input) > -1) {
+                        incluirUsuario = true;
+                    }
+                } else if (filtroOpcao === "2") {
+                    if (usuario.matricula.toUpperCase().indexOf(input) > -1) {
+                        incluirUsuario = true;
+                    }
+                }
+                if (incluirUsuario) totalUsuarios++;
+                return incluirUsuario;
+            });
+
+            // Atualizar links de paginação
+            atualizarPaginacao(filteredUsuarios.length);
+
+            // Exibir alunos na tabela considerando a página atual
+            var startIndex = (currentPage - 1) * rowsPerPage;
+            var endIndex = startIndex + rowsPerPage;
+            for (var i = startIndex; i < endIndex && i < filteredUsuarios.length; i++) {
+                var usuario = filteredUsuarios[i];
+                var row = document.createElement("tr");
+                row.innerHTML = "<td><input type='checkbox'></td>" +
+                    "<td>" + usuario.nome + "</td>" +
+                    "<td>" + usuario.matricula + "</td>" +
+                    "<td>" + usuario.cargo+ "</td>" +
+                    "<td>" + usuario.cadastro + "</td>" +
+                    "<td>" + usuario.trabalho + "</td>" +
+                    "<td>" + usuario.status + "</td>" +
+                    "<td><span class='material-symbols-outlined'>edit</span></td>";
+                corpoTabela.appendChild(row);
+            }
+
+            // Atualizar quantidade de alunos
+            document.getElementById("quantidadeUsuarios").innerText = "Quantidade de Usuários: " + totalUsuarios;
+        }
+
+        // Função para atualizar a exibição da paginação
+        function atualizarPaginacao(totalRows) {
+            var paginacao = document.getElementById("paginacao");
+            var totalPages = Math.ceil(totalRows / rowsPerPage);
+            paginacao.innerHTML = "";
+            for (var i = 1; i <= totalPages; i++) {
+                var link = document.createElement("a");
+                link.href = "#";
+                link.innerText = i;
+                if (i === currentPage) {
+                    link.className = "active";
+                }
+                link.onclick = function() {
+                    currentPage = parseInt(this.innerText);
+                    mostrarUsuarios(); // Chama mostrarAlunos() ao clicar na página
+                };
+                paginacao.appendChild(link);
+            }
+        }
+
+        // Função para filtrar a tabela
+        function filtrarTabela() {
+            currentPage = 1; // Define currentPage como 1 antes de exibir os resultados da consulta
+            mostrarUsuarios(); // Chama mostrarAlunos() após definir currentPage
+        }
+
+        // Chamar mostrarAlunos pela primeira vez para exibir a primeira página
+        mostrarUsuarios();
+            </script>
+        </body>
+        </html>
+
+
+        {% endblock %}
