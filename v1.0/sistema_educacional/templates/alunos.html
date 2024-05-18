@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block main_title%}Alunos{% endblock %}
+{% block first_title %}User{% endblock %}
+{% block sub_title %}Lista de Alunos{% endblock %}
+{% block title %}Alunos{% endblock %}
+
+{% block content %}
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/alunos.css')}}">
+</head>
+<h2 style="text-align: center;">Lista de Usuários</h2>
+
+<div class="container">
+        <div>
+          <div class="row">
+            <form class="row g-3">
+                <div class="col-md-2">
+                  <label for="validationServer05" class="form-label">ID Venda</label>
+                  <input type="text" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
+                </div>
+                <div class="col-md-3">
+                  <label for="validationServer04" class="form-label">Cliente</label>
+                  <select class="form-select" id="validationServer04" required>
+                      <option selected disabled value="">Selecione...</option>
+                      <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="validationServer05" class="form-label">Valor Total Venda</label>
+                  <input type="text" class="form-control" id="validationServer05" aria-describedby="validationServer05Feedback" required>
+                </div>
+                <div class="col-md-3">
+                  <label for="validationServer04" class="form-label">Forma Pagamento</label>
+                  <select class="form-select" id="validationServer04" required>
+                    <option selected>Selecione Forma de Pagamento</option>
+                    <option value="1">CARTAO/DÉBITO</option>
+                    <option value="2">CARTAO/CRÉDITO</option>
+                    <option value="3">PIX</option>
+                    <option value="4">DINHEIRO</option>
+                  </select>
+                </div> 
+            </form>
+            <div class="container text-center ">
+              <br>
+              <a th:href="@{/produtos}"><button type="submit" class="btn-alunos"><i
+                          class="fa-solid fa-rotate-left"></i> Limpar</button></a>
+              <button type="submit" class="btn-alunos"><i class="fa-regular fa-floppy-disk"></i>
+                  <b>Pesquisar</b></button>
+            </div>
+          </div>
+        </div>
+        <section class="main-header grid">
+          <div class="form-input">
+            <input type="search" placeholder="Search...">
+            <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+          </div>
+          <a href="/cadastro"><button type="submit" class="btn-alunos"><i class="fa-regular fa-floppy-disk"></i>
+            Novo Usuário</button></a>
+        </section>
+        
+        <div class="linha"></div>
+        <div>
+            <table id="tabela" class="table table-striped responsive nowrap" style="width:100%">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Escola</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for escola, alunos in alunos_por_escola.items() %}   
+                  {% for aluno in alunos %}                   
+                  <tr>
+                    <th scope="row">{{ aluno.id}}</th>
+                    <td>{{ aluno.nome }}</td>
+                    <td>{{ aluno.escola.nome }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="col"><button type="button" class="btn-alunos">Editar</button></td>
+                    <td class="col"><button type="button" class="btn-alunos">Excluir</button></td>
+                  </tr>
+                  {% endfor%}
+                  {% endfor%}
+                </tbody>
+              </table>
+              <section class="flex items-center justify-between">
+                <small class="muted">1-10 / 123 items</small>
+        
+                <div class="flex gap-2 items-center">
+                  <div class="flex gap-05 items-center">
+                    <input class="input number small" readonly type="number" value="1" />
+                    <small class="muted">/</small>
+                    <small class="muted">13 pages</small>
+                  </div>
+        
+                  <div class="flex gap-05 items-center">
+                    <button class="button icon link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#247783" viewBox="0 0 256 256">
+                        <path
+                              d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"
+                              ></path>
+                      </svg>
+                    </button>
+        
+                    <button class="button icon link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#247783" viewBox="0 0 256 256">
+                        <path
+                              d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"
+                              ></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </section>
+              <div class="col-sm">
+              </div>
+              <br>
+              
+              
+          
+              <script src="{{ url_for('static', filename='js/alunos.js') }}"></script>
+                  
+              
+{% endblock %}

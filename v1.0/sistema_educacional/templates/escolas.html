@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Escolas{% endblock %}
+{% block first_title %}User{% endblock %}
+{% block main_title%}Escolas{% endblock %}
+{% block sub_title %}Escolas{% endblock %}
+{% block content %}
+{% for escola in escolas %}
+    <h2>{{ escola.nome }}</h2>
+{% endfor %}
+
+{% endblock %}
