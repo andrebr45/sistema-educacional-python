@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block main_title%}Usuário{% endblock %}
+{% block first_title %}Usuários{% endblock %}
+{% block sub_title %}Cadastro de Usuários{% endblock %}
+{% block title %}Novo Usuário{% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages%}
+           {% for msg in messages %}
+               <p>{{msg}}</p>
+           {% endfor %}
+        {% endif%}
+    {% endwith %}
+    
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/cadastro.css')}}">
+</head>
+<div class="container">
+    <header>Cadastro</header>
+    <form form action="{{ url_for('cadastro') }}" method="POST">
+        <div class="form first">
+            <div class="details personal">
+                <span class="title">Cadastrar Usuário</span>
+                <div class="fields">
+                    <div class="input-field">
+                        <label>Nome</label>
+                        <input type="text" name="cd_user_nome" placeholder="Nome Completo" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Telefone</label>
+                        <input id="inputPhoneForm" name="cd_user_telefone" type="tel" placeholder="Telefone" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Gênero</label>
+                        <select name="cd_user_genero" type="text" placeholder="Gênero">
+                            <option disabled>Selecionar Gênero</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-field">
+                        <label>CPF</label>
+                        <input type="text" name="cd_user_cpf" placeholder="CPF" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Email</label>
+                        <input type="text" name="cd_user_email" placeholder="E-mail" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Data de Nascimento</label>
+                        <input type="date" name="cd_user_nascimento" required>
+                    </div>
+                </div>
+            </div>
+            <div class="details ID">
+                <span class="title">Identificação</span>
+                <div class="fields">
+                    <div class="input-field">
+                        <label>N° Matrícula</label>
+                        <input type="text" name="cd_user_matricula" placeholder="Matrícula" required>
+                    </div>
+                    <div class="input-field">
+                        <label>ID Usuário</label>
+                        <input type="text" name="cd_user_usuario" placeholder="Usuário" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Local de Trabalho</label>
+                        <input type="text" name="cd_user_trabalho" placeholder="Local de Trabalho" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Cargo</label>
+                        <input type="text" name="cd_user_cargo" placeholder="Cargo" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Senha</label>
+                        <input type="text" name="cd_user_senha" placeholder="Senha" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Confirmar Senha</label>
+                        <input type="text"  name="cd_user_c_senha" placeholder="Confirmar Senha" required>
+                    </div>
+                </div>
+                <div class="details ID">
+                    <span class="title">Endereço</span>
+                    <div class="fields">
+                        <div class="input-field">
+                            <label>Logradouro</label>
+                            <input type="text" name="cd_user_rua" placeholder="Rua">
+                        </div>
+                        <div class="input-field">
+                            <label>N°</label>
+                            <input type="text" name="cd_user_numero" placeholder="N°">
+                        </div>
+                        <div class="input-field">
+                            <label>Bairro</label>
+                            <input type="text" name="cd_user_bairro" placeholder="Bairro">
+                        </div>
+                        <div class="input-field">
+                            <label>Cidade</label>
+                            <input type="text" name="cd_user_municipio" placeholder="Município">
+                        </div>
+                        <div class="input-field">
+                            <label>Estado</label>
+                            <input type="text" name="cd_user_estado" placeholder="Estado">
+                        </div>
+                        <div class="input-field">
+                            <label>CEP</label>
+                            <input id="inputCEPForm" name="cd_user_cep" type="text" placeholder="CEP">
+                        </div>
+                    </div>
+                    <p><input type="submit" value="submit"/></p>
+                </div> 
+            </div> 
+        </div>
+    </form>
+</div>
+{% endblock %}
